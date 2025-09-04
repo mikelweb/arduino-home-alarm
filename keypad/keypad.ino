@@ -5,7 +5,10 @@ char teclas[4][3] = {{'1','2','3'},
                      {'7','8','9'}, 
                      {'*','0','#'}};
 
+String pwd1 = "1234";
+String pwd2 = "4321";
 String currentEntry;
+bool alarmStatus = false;
 void setup()
 {
   for (int nL = 0; nL <= 3; nL++) {
@@ -25,6 +28,22 @@ void resetKeypad() {
   currentEntry = "";
   Serial.println("Reset keypad");
 }
+bool checkPwd(String pwd) {
+  if(pwd == pwd1) {
+    Serial.println("Pass 1 OK");
+    return true;
+  } else if(pwd == pwd2) {
+    Serial.println("Pass 2 OK");
+    return true;
+  }
+  return false;
+}
+
+void toggleAlarmStatus() {
+  alarmStatus = !alarmStatus;
+  Serial.print("Alarm Status: ");
+  Serial.println(alarmStatus);
+}
 
 void loop()
 {
@@ -40,6 +59,9 @@ void loop()
           if(isDigit(teclas[nL][nC])) {
             currentEntry += teclas[nL][nC];
             Serial.println(currentEntry);
+          } else {
+            if(checkPwd(currentEntry)) {
+              toggleAlarmStatus();
             }
             resetKeypad();
           }
